@@ -1,36 +1,35 @@
 package com.backend.petshop.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_client")
-public class Client {
+@Table(name = "tb_pet")
+public class Pet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private Long cpf;
+	private String breed;
+	private Integer months;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "client")
-	private List<Pet> list = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private Client client;
 	
-	public Client(Long id, String name, Long cpf) {
+	public Pet(Long id, String name, String breed, Integer months) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.cpf = cpf;
+		this.breed = breed;
+		this.months = months;
 	}
 
 	public Long getId() {
@@ -42,13 +41,19 @@ public class Client {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getCpf() {
-		return cpf;
+	public String getBreed() {
+		return breed;
 	}
-	public void setCpf(Long cpf) {
-		this.cpf = cpf;
+	public void setBreed(String breed) {
+		this.breed = breed;
 	}
-	
+	public Integer getMonths() {
+		return months;
+	}
+	public void setMonths(Integer months) {
+		this.months = months;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -61,12 +66,12 @@ public class Client {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Client other = (Client) obj;
+		Pet other = (Pet) obj;
 		return Objects.equals(id, other.id);
 	}
 
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", cpf=" + cpf + "]";
-	}	
+		return "Pet [id=" + id + ", name=" + name + ", breed=" + breed + ", months=" + months + "]";
+	}
 }
